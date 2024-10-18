@@ -7,6 +7,8 @@ import numpy as np
 import mapclassify
 from pyod.models.iforest import IForest
 from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import DBSCAN
+from sklearn.metrics import silhouette_score
 
 #Generate csv data in lat and longitude
 def get_csv_data():
