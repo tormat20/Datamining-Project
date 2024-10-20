@@ -10,6 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import DBSCAN
 from sklearn.metrics import silhouette_score
 from sklearn.cluster import KMeans
+import datetime
 
 #--------------------------------------------------------------------
 # Functions for data generation, either in lat and long or in meters
@@ -38,7 +39,7 @@ def get_csv_data_meter():
     data = data[data.duplicated() == False] #Removing duplicates
 
     data['ended_at'] = pd.to_datetime(data['ended_at'])
-    data['started_at'] = pd.to_datetime(data['started_at'])
+    data['ended_at'] = pd.to_datetime(data['started_at'])
     data = gpd.GeoDataFrame(data, geometry=gpd.points_from_xy(data['end_lng'], data['end_lat'], crs='EPSG:4326'))
     data.to_crs(crs='EPSG:32634', inplace=True)
 
@@ -244,3 +245,8 @@ def find_distance(df):
 
     #Returning the travel distances
     return np.sqrt(np.square(coords[:,0]-coords[:,2])+np.square(coords[:,1]-coords[:,3]))
+
+#Finds and return a time duration in minutes
+def find_time_duration(df):
+    time = df['ended_at']-df['started_at']
+    return time.apply(datetime.timedelta.total_seconds)/60
